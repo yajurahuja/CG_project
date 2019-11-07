@@ -24,9 +24,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
-RESOURCES += \
-        bojack.jpg
-
 SOURCES += \
         main.cpp \
         mainwindow.cpp
