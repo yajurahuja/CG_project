@@ -8,6 +8,8 @@
 #include "opencv2/imgproc.hpp"
 #include <iostream>
 
+QApp q1;
+
 
 static void getBinMask( const Mat& comMask, Mat& binMask )
 {
@@ -140,10 +142,15 @@ void QApp::showImage() const
     for( it = prFgdPxls.begin(); it != prFgdPxls.end(); ++it )
         circle( res, *it, radius, PINK, thickness );
 
-    if( rectState == IN_PROCESS || rectState == SET )
+    if( rectState == IN_PROCESS)
         rectangle( res, Point( rect.x, rect.y ), Point(rect.x + rect.width, rect.y + rect.height ), GREEN, 2);
-
+    else if(rectState == SET)
+        rectangle( res, Point( rect.x, rect.y ), Point(rect.x + rect.width, rect.y + rect.height ), BLACK, 2);
     imshow( *winName, res);
+
+    cv::Mat check = cv::imread("1_1.jpg");
+
+    res.copyTo(q1.res1);
 }
 
 void QApp::reset()
@@ -170,6 +177,7 @@ void QApp::setImageAndWinName(const Mat &_image, const string &_winName)
     reset();
 }
 
+
 void QApp::setRectInMask()
 {
     CV_Assert( !mask.empty() );
@@ -180,6 +188,8 @@ void QApp::setRectInMask()
     rect.height = min(rect.height, image->rows-rect.y);
     (mask(rect)).setTo( Scalar(GC_PR_FGD) );
 }
+
+
 
 void QApp::setLblsInMask(int flags, Point p, bool isPr)
 {
@@ -211,4 +221,65 @@ void QApp::setLblsInMask(int flags, Point p, bool isPr)
         circle( mask, p, radius, fvalue, thickness );
     }
 }
+
+void QApp::setBG(const Mat img, const Mat base)
+{
+    cv::Mat dst;
+    cv::Mat tmp, thr;
+
+    cv::cvtColor(img, tmp, COLOR_BGR2GRAY);
+    cv::threshold(tmp, thr, 10, 255, THRESH_BINARY);
+
+    std::vector< std::vector <cv::Point> > contours; // Vector for storing contour
+    vector< Vec4i > hierarchy;
+    int largest_contour_index=0;
+    int largest_area=0;
+
+    cv::Mat alpha(img.size(),CV_8UC1,Scalar(0));
+
+    cv::findContours( tmp, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE ); // Find the contours in the image
+    for( int i = 0; i< contours.size(); i++ ) // iterate through each contour.
+      {
+       double a=contourArea( contours[i],false);  //  Find the area of contour
+       if(a>largest_area){
+       largest_area=a;
+       largest_contour_index=i;                //Store the index of largest contour
+       }
+      }
+    cv::drawContours(alpha, contours, largest_contour_index, Scalar(255), FILLED, 8, hierarchy );
+
+//    cv::imshow("alpha",alpha);
+
+    cv::Mat rgb[3];
+    cv::split(img, rgb);
+
+    cv::Mat rgba[4] = {rgb[0], rgb[1], rgb[2], alpha};
+    cv::merge(rgba,4,dst);
+
+    cv::Mat check = cv::imread("1_2.png");
+
+    if(!check.data){
+        cv::imwrite("1_2.png", dst);
+
+        cv::Mat dst1;
+
+        cv::inpaint(base, alpha, dst1, 3, INPAINT_NS);
+
+        cv::imwrite("1_3.jpg", dst1);
+    }
+    else{
+        cv::imwrite("1_5.png", dst);
+    }
+}
+
+void QApp::saveimg1()
+{
+    cv::imwrite("1_1.jpg", q1.res1);
+}
+
+void QApp::saveimg2()
+{
+    cv::imwrite("1_4.jpg", q1.res1);
+}
+
 

@@ -18,6 +18,7 @@ const Scalar PINK = Scalar(230,130,255);
 const Scalar BLUE = Scalar(255,0,0);
 const Scalar LIGHTBLUE = Scalar(255,255,160);
 const Scalar GREEN = Scalar(0,255,0);
+const Scalar BLACK = Scalar(0,0,0);
 
 const int BGD_KEY = EVENT_FLAG_CTRLKEY;
 const int FGD_KEY = EVENT_FLAG_SHIFTKEY;
@@ -39,6 +40,10 @@ public:
     void reset();
     //void re();
     void setImageAndWinName( const Mat& _image, const string& _winName );
+    void setBG(const Mat img, const Mat base);
+    Mat res1;
+    void saveimg1();
+    void saveimg2();
 
 private:
     void setRectInMask();
