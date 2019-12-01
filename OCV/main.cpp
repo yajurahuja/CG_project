@@ -13,7 +13,7 @@ using namespace std;
 using namespace cv;
 
 QApp q;
-QApp q2;
+QApp q3;
 
 
 static void on_mouse( int event, int x, int y, int flags, void* param )
@@ -21,15 +21,20 @@ static void on_mouse( int event, int x, int y, int flags, void* param )
     q.mouseClick( event, x, y, flags, param );
 }
 
+static void on_mouse1( int event, int x, int y, int flags, void* param )
+{
+    q3.mouseClick( event, x, y, flags, param );
+}
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-//    MainWindow w;
-//    w.show();
+    MainWindow w;
+    w.show();
 
-//    cv::Mat img = cv::imread("1_3.jpg", 1);
+    cv::Mat img = cv::imread("Base.jpg", 1);
 
-//    const string winName = "SELECT THE WATER BODY";
+//    const string winName = "SELECT THE BOAT";
 //    namedWindow( winName, WINDOW_AUTOSIZE );
 //    setMouseCallback( winName, on_mouse, 0 );
 
@@ -66,11 +71,10 @@ int main(int argc, char *argv[])
 //        }
 //    }
 //    exit_main:
-//        destroyWindow( winName );
+//        destroyWindow(winName );
 
-//    cv::Mat img1 = cv::imread("1_1.jpg", 1);
-//    q.setBG(img1, img);
-
+    cv::Mat img1 = cv::imread("New1.jpg", 1);
+    q.setBG(img1, img);
 
 //    cv::waitKey(500);
 
@@ -78,11 +82,11 @@ int main(int argc, char *argv[])
 
 //    const string winName1 = "SELECT THE WATER BODY";
 //    namedWindow( winName1, WINDOW_AUTOSIZE );
-//    setMouseCallback( winName1, on_mouse, 0 );
+//    setMouseCallback( winName1, on_mouse1, 0 );
 
-//    q2.setImageAndWinName(img2, winName1 );
+//    q3.setImageAndWinName(img2, winName1);
 
-//    q2.showImage();
+//    q3.showImage();
 
 //    for(;;)
 //    {
@@ -91,20 +95,20 @@ int main(int argc, char *argv[])
 //        {
 //        case '\x1b':
 //            cout << "Exiting ..." << endl;
-//            q2.saveimg2();
+//            q3.saveimg2();
 //            goto exit_main1;
 //        case 'r':
 //            cout << endl;
-//            q2.reset();
-//            q2.showImage();
+//            q3.reset();
+//            q3.showImage();
 //            break;
 //        case 'n':
-//            int iterCount = q2.getIterCount();
+//            int iterCount = q3.getIterCount();
 //            cout << "<" << iterCount << "... ";
-//            int newIterCount = q2.nextIter();
+//            int newIterCount = q3.nextIter();
 //            if( newIterCount > iterCount )
 //            {
-//                q2.showImage();
+//                q3.showImage();
 //                cout << iterCount << ">" << endl;
 //            }
 //            else
@@ -113,14 +117,14 @@ int main(int argc, char *argv[])
 //        }
 //    }
 //    exit_main1:
-//        destroyWindow( winName1 );
+//        destroyWindow(winName1);
 
 //    cv::Mat img3 = cv::imread("1_4.jpg", 1);
-//    q2.setBG(img3, img2);
+//    q3.setBG(img3, img2);
 
 
-    //1_2.png - boat
-    //1_3.jpg - bg
+//    1_2.png - boat
+//    1_3.jpg - bg
 
     cv::Mat bg = cv::imread("1_3.jpg", -1);
     cv::Mat boat = cv::imread("1_2.png", -1);

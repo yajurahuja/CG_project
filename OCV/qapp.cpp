@@ -263,7 +263,7 @@ void QApp::setBG(const Mat img, const Mat base)
 
         cv::Mat dst1;
 
-        cv::inpaint(base, alpha, dst1, 3, INPAINT_NS);
+        cv::inpaint(base, alpha, dst1, 3, INPAINT_);
 
         cv::imwrite("1_3.jpg", dst1);
     }
