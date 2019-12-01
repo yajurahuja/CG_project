@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>shaders/fshader.fs</file>
+        <file>shaders/vshader.vs</file>
+        <file>shaders/vshader2.vs</file>
+        <file>shaders/fshader2.fs</file>
+        <file>shaders/fshaderclouds.fs</file>
+        <file>shaders/vshaderclouds.vs</file>
+        <file>shaders/fshaderwave.fs</file>
+        <file>shaders/vshaderwave.vs</file>
+        <file>shaders/fshaderboat.fs</file>
+        <file>shaders/fshadertrees.fs</file>
+        <file>shaders/vshaderboat.vs</file>
+        <file>shaders/vshadertrees.vs</file>
+    </qresource>
+</RCC>
