@@ -39,6 +39,8 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core
 public:
     OpenGLWidget(QWidget *parent);
     ~OpenGLWidget();
+    void WindSpeed(int value);
+    glm::vec2 Wind;
 
 protected:
     void initializeGL();
@@ -101,7 +103,7 @@ protected:
     int size;
     double G_constant;
     QTimer *timer ;
-    glm::vec2 Wind;
+
     int N, M;
     double L_x, L_z;
     double A;
@@ -112,6 +114,8 @@ protected:
     void createSphereObject2();
     time_t timeInSec;
     size_t nTriangles;
+
+
 private:
     GLuint program, program_clouds, program_waves, program_boat, program_trees;
     GLint vVertex_attrib, vNormal_attrib, vColor_attrib;
@@ -127,7 +131,7 @@ private:
 
     GLuint cube_VAO, sphere_VAO, indices_IBO; //Vertex array object for cube
     struct timeval tp;
-    
+
     int tri_points;
     int nTheta, nPhi;
     std::vector<float> x,y,z, arr;
@@ -140,6 +144,8 @@ private:
     GLuint tex, tex1, tex2, tex3, tex_clouds, tex_background, tex_waves, tex_boat, tex_trees;
     int length;
     int width;
+
+
 
 };
 

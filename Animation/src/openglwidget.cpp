@@ -61,7 +61,7 @@ void OpenGLWidget::initializeGL()
     N = 16;
     M = 16;
     A = 1;
-    Wind = glm::vec2(0.5f, 0.5f);
+    Wind = glm::vec2(-1.0f, 0.5f);
     L_x = 100;
     L_z = 100;
     length = 500;
@@ -142,7 +142,7 @@ void OpenGLWidget::paintGL()
     glUseProgram(program_clouds);
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, tex_clouds);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+     glDrawArrays(GL_TRIANGLES, 0, 6);
 
 
 
@@ -375,6 +375,11 @@ bool OpenGLWidget:: load_texture( const char *file_name, GLuint *tex ) {
 
 }
 
+void OpenGLWidget::WindSpeed(int value)
+{
+    Wind = glm::vec2(float (value - 1) , 0.5f);
+}
+
 
 void OpenGLWidget::createSphereObject(){
     glUseProgram(program);
@@ -440,9 +445,9 @@ void OpenGLWidget::displace()
         exit(0);
     }
     glUniform1f(uniform_time, millisec);
-    displace_cloud(wind);
-    displace_boat(wind);
-    displace_trees(wind);
+    displace_cloud(Wind);
+    displace_boat(Wind);
+    displace_trees(Wind);
     //Mat_Texture(DisplacedLayer(img, double(timeInSec)), tex1);
     //Mat_Texture(img);
 }
@@ -466,8 +471,6 @@ void OpenGLWidget::displace_cloud(glm::vec2 wind)
 void OpenGLWidget::displace_boat(glm::vec2 wind)
 {
     long int millisec = get_time_milli();
-
-
     glm::mat4 displaced = translate_boat(millisec, wind);
     glUseProgram(program_boat);
     tboat_uniform = glGetUniformLocation(program_boat, "tboat");
@@ -491,8 +494,8 @@ void OpenGLWidget::displace_boat(glm::vec2 wind)
 glm::mat4 OpenGLWidget::translate_cloud(long int time, glm::vec2 wind)
 {
     //cloud displacement
-    float wind_x = wind.x;
-    float displacement = (((int)(time/200) % 50)+20);
+    int wind_x = wind.x + 1;
+    float displacement = (((int)(time * wind_x/180) % 50)+10);
     qDebug()<<time<<" "<<displacement<<endl;
     glm::mat4 l_position = glm::translate(glm::mat4(1.0f), glm::vec3(displacement, 0.0f, 0.0f));
     return l_position;
@@ -500,8 +503,8 @@ glm::mat4 OpenGLWidget::translate_cloud(long int time, glm::vec2 wind)
 
 glm::mat4 OpenGLWidget::translate_boat(long int time, glm::vec2 wind)
 {
-    float wind_x = wind.x;
-    float displacement = 0.02*sin(((time/200) % 50)+20);
+    int wind_x = wind.x + 1;
+    float displacement = 0.02*wind_x*cos(((int)(time *wind_x /200) % 50)+20);
     qDebug()<<time<<" "<<displacement<<endl;
     glm::mat4 l_position = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f,displacement, 0.0f));
     return l_position;
@@ -509,8 +512,8 @@ glm::mat4 OpenGLWidget::translate_boat(long int time, glm::vec2 wind)
 
 glm::mat4 OpenGLWidget::rotate_boat(long int time, glm::vec2 wind)
 {
-
-    float displacement = 0.2*sin(((time/200) % 50));
+    int wind_x = wind.x + 1;
+    float displacement = 0.2*sin(((int)(time*wind_x/200) % 50));
     qDebug()<<time<<" "<<displacement<<endl;
     glm::mat4 l_position = glm::rotate(glm::mat4(1.0f), glm::radians(displacement), glm::vec3(0,0,1));
     return l_position;
@@ -531,7 +534,8 @@ void OpenGLWidget::displace_trees(glm::vec2 wind)
 
 glm::mat4 OpenGLWidget::rotate_trees(long time, glm::vec2 wind)
 {
-    float displacement = 0.1*cos(((time/500) % 100));
+    float wind_x = wind.x+1;
+    float displacement = 0.1*wind_x*sin(((int)(time/500) % 100));
     qDebug()<<time<<" "<<displacement<<endl;
     glm::mat4 l_position = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f,-2.0f, 0.0f));
     l_position = glm::rotate(l_position, glm::radians(displacement), glm::vec3(0,0,1));

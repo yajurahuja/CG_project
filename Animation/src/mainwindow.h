@@ -16,7 +16,7 @@ public:
     ~MainWindow();
 
 private slots:
-
+    void on_TranslateWind_valueChanged(int value);
     void on_actionQuit_triggered();
 
 private:
